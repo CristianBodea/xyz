@@ -1,0 +1,30 @@
+@Override
+	public List<GenericTimeIntervalResponseDTO> countVehicleTypeOnInterval(LocalDateTime start, LocalDateTime end,
+			int duration) {
+
+
+		LocalTime startInterval=start.toLocalTime();
+		LocalTime endInterval=end.toLocalTime();
+
+		LocalTime endIntervalTemporal;
+		GenericTimeIntervalResponseDTO genericTimeIntervalResponseDTO;
+
+		List<GenericTimeIntervalResponseDTO> genericTimeIntervalResponseDTOList= new ArrayList<>();
+
+		while(startInterval.compareTo(endInterval)<0)
+		{
+			endIntervalTemporal=startInterval.plusMinutes(duration);
+			genericTimeIntervalResponseDTO=new GenericTimeIntervalResponseDTO();
+
+			List<VehicleCountResponseDTO> vehicleCountResponseDTOList=countNumberOfEachVehicleType(startInterval,endIntervalTemporal);
+
+			genericTimeIntervalResponseDTO.setListVehicleCountResponseDTO(vehicleCountResponseDTOList);
+			genericTimeIntervalResponseDTO.setTimeInterval(startInterval.getHour()+":"+startInterval.getMinute()+"-"+endIntervalTemporal.getHour()+":"+endIntervalTemporal.getMinute());
+
+			genericTimeIntervalResponseDTOList.add(genericTimeIntervalResponseDTO);
+
+			startInterval=endIntervalTemporal;
+
+		}
+
+	}
